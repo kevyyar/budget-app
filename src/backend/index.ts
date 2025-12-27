@@ -1,0 +1,10 @@
+export { SupabaseClientFactory } from './db/supabaseClient.js';
+export { ProfilesRepository } from './repositories/profilesRepository.js';
+export { BudgetsRepository } from './repositories/budgetsRepository.js';
+export { CategoriesRepository } from './repositories/categoriesRepository.js';
+export { ExpensesRepository } from './repositories/expensesRepository.js';
+export { AnalyticsRepository } from './repositories/analyticsRepository.js';
+export { BudgetService } from './services/budgetService.js';
+export { ExpenseService } from './services/expenseService.js';
+export { AnalyticsService } from './services/analyticsService.js';
+export * from './types/index.js';
