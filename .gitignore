@@ -1,0 +1,17 @@
+node_modules/
+**/node_modules/
+.pnpm-store/
+
+.DS_Store
+*.log
+
+.env
+.env.*
+!.env.example
+
+apps/**/dist/
+apps/**/coverage/
+apps/**/.vite/
+
+supabase/.temp/
+supabase/.branches/

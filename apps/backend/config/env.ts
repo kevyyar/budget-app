@@ -18,6 +18,6 @@ const requireEnv = (name: string): string => {
 export const env: EnvConfig = {
   supabaseUrl: requireEnv('SUPABASE_URL'),
   supabaseAnonKey: requireEnv('SUPABASE_ANON_KEY'),
-  supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
-  env: process.env.ENV ?? 'development'
+  supabaseServiceRoleKey: requireEnv('SUPABASE_SERVICE_ROLE_KEY'),
+  env: requireEnv('ENV') ?? 'development'
 };
