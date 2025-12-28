@@ -1,0 +1,27 @@
+/* ----------  DESIGN TOKENS  ---------- */
+:root {
+  --font-headline: 'Manrope', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'Roboto Mono', monospace;
+}
+
+/* ----------  HEADLINES / CARDS  ---------- */
+.u-headline {
+  font-family: var(--font-headline);
+  font-weight: 600;          /* already baked into the URL */
+  letter-spacing: 0.01em;
+}
+
+/* ----------  BODY / LABELS  ---------- */
+.u-body,
+.u-label {
+  font-family: var(--font-body);
+  font-weight: 400;
+}
+
+/* ----------  AMOUNTS / LEDGER  ---------- */
+.u-amount {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;   /* keeps decimals aligned */
+}
