@@ -8,6 +8,7 @@
   --color-card: linear-gradient(145deg, #1e2a38 0%, #151c25 100%);
   --color-accent: #2afc98;
   --color-text: #fff;
+  --color-text-secondary: #000;
   --color-text-muted: rgba(255, 255, 255, 0.5);
 }
 

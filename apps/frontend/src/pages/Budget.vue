@@ -18,6 +18,7 @@
         icon-bg="rgba(124, 107, 255, 0.15)"
       />
     </div>
+    <RecentExpenses />
   </div>
 </template>
 
@@ -25,6 +26,7 @@
 import BudgetHeader from '@/components/BudgetHeader.vue';
 import BudgetCard from '@/components/BudgetCard.vue';
 import ExpenseSummaryCard from '@/components/ExpenseSummaryCard.vue';
+import RecentExpenses from '@/components/RecentExpenses.vue';
 </script>
 
 <style scoped>

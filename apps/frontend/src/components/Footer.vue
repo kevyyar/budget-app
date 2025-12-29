@@ -47,7 +47,7 @@
     background-color: var(--color-accent);
     border-radius: 50%;
     padding: 0.5rem;
-    color: var(--color-background);
+    color: var(--color-text-secondary);
 }
 
 .add-btn {
