@@ -3,7 +3,7 @@ import Footer from './components/Footer.vue';
 </script>
 
 <template>
-  <main class="app-content">
+  <main class="app-content u-container">
     <router-view />
   </main>
   <Footer class="app-footer" />

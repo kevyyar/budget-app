@@ -1,5 +1,5 @@
 <template>
-    <div class="card">
+    <div class="card u-container">
         <Tabs :value="currentRoute">
             <TabList>
                 <Tab v-for="tab in items" :value="tab.route" :key="tab.label">

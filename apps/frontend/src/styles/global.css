@@ -38,3 +38,12 @@ html, body {
   font-weight: 500;
   font-variant-numeric: tabular-nums;   /* keeps decimals aligned */
 }
+
+/* ----------  CONTAINER  ---------- */
+.u-container {
+  width: 100%;
+  max-width: 430px;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  box-sizing: border-box;
+}
