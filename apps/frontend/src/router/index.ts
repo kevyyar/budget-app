@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Budget from '../pages/Budget.vue'
 import Analytics from '../pages/Analytics.vue'
-import Add from '../pages/Add.vue'
 import Expenses from '../pages/Expenses.vue'
 import Settings from '../pages/Settings.vue'
 
@@ -17,11 +16,6 @@ const router = createRouter({
       path: '/analytics',
       name: 'Analytics',
       component: Analytics,
-    },
-    {
-      path: '/add',
-      name: 'Add',
-      component: Add,
     },
     {
       path: '/expenses',
