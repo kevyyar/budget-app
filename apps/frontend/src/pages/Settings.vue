@@ -126,8 +126,9 @@ const loading = ref(false);
 const error = ref('');
 const success = ref('');
 
-const today = new Date().toISOString().split('T')[0];
-const twoWeeksLater = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+const today = new Date().toISOString().split('T')[0] ?? '';
+const twoWeeksLater =
+  new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] ?? '';
 
 const form = reactive({
   name: '',
@@ -138,7 +139,12 @@ const form = reactive({
 });
 
 function formatDate(dateStr: string) {
-  const [year, month, day] = dateStr.split('-').map(Number);
+  const [yearStr, monthStr, dayStr] = dateStr.split('-');
+  if (!yearStr || !monthStr || !dayStr) return dateStr;
+  const year = Number(yearStr);
+  const month = Number(monthStr);
+  const day = Number(dayStr);
+  if (!Number.isFinite(year) || !Number.isFinite(month) || !Number.isFinite(day)) return dateStr;
   const date = new Date(Date.UTC(year, month - 1, day));
   return date.toLocaleDateString('en-US', {
     month: 'short',
@@ -147,8 +153,8 @@ function formatDate(dateStr: string) {
   });
 }
 
-function todayString() {
-  return new Date().toISOString().split('T')[0];
+function todayString(): string {
+  return new Date().toISOString().split('T')[0] ?? '';
 }
 
 function getBudgetStatus(budget: Budget) {
