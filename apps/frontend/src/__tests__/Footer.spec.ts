@@ -61,11 +61,13 @@ describe('Footer', () => {
       expect(tabs).toHaveLength(5)
     })
 
-    it('renders router-links for each tab', () => {
+    it('renders router-links for navigation tabs and button for Add', () => {
       const wrapper = createWrapper()
       const links = wrapper.findAllComponents(RouterLinkStub)
+      const addButton = wrapper.find('.add-btn')
 
-      expect(links).toHaveLength(5)
+      expect(links).toHaveLength(4)
+      expect(addButton.exists()).toBe(true)
     })
   })
 
@@ -73,7 +75,6 @@ describe('Footer', () => {
     const expectedRoutes = [
       { route: '/budget', label: 'Budget' },
       { route: '/analytics', label: 'Analytics' },
-      { route: '/add', label: 'Add' },
       { route: '/expenses', label: 'Expenses' },
       { route: '/settings', label: 'Settings' },
     ]
@@ -85,6 +86,14 @@ describe('Footer', () => {
 
       expect(link).toBeDefined()
       expect(link?.text()).toContain(label)
+    })
+
+    it('renders Add as button (not router-link)', () => {
+      const wrapper = createWrapper()
+      const addButton = wrapper.find('.add-btn')
+
+      expect(addButton.exists()).toBe(true)
+      expect(addButton.text()).toContain('Add')
     })
   })
 
@@ -184,11 +193,11 @@ describe('Footer', () => {
 
     it('tab order matches visual order', () => {
       const wrapper = createWrapper()
-      const links = wrapper.findAllComponents(RouterLinkStub)
-      const expectedOrder = ['/budget', '/analytics', '/add', '/expenses', '/settings']
+      const tabItems = wrapper.findAll('.tab-item')
+      const expectedOrder = ['Budget', 'Analytics', 'Add', 'Expenses', 'Settings']
 
-      links.forEach((link, index) => {
-        expect(link.props().to).toBe(expectedOrder[index])
+      tabItems.forEach((item, index) => {
+        expect(item.text()).toContain(expectedOrder[index])
       })
     })
   })

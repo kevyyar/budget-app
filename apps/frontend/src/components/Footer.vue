@@ -35,7 +35,7 @@
     align-items: center;
     gap: 0.25rem;
     text-decoration: none;
-    color: #2afc98;
+    color: var(--color-accent);
 }
 
 .tab-item i {
@@ -44,10 +44,10 @@
 
 .tab-item i.add {
     font-size: 2rem;
-    background-color: #2afc98;
+    background-color: var(--color-accent);
     border-radius: 50%;
     padding: 0.5rem;
-    color: black;
+    color: var(--color-background);
 }
 
 .add-btn {
