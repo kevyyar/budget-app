@@ -2,7 +2,9 @@
   "name": "budget-system",
   "private": true,
   "scripts": {
+    "dev": "pnpm run dev:frontend & pnpm run dev:backend",
     "dev:frontend": "pnpm --filter ./apps/frontend dev",
+    "dev:backend": "pnpm --filter ./apps/backend dev",
     "build:backend": "pnpm --filter ./apps/backend build",
     "build:frontend": "pnpm --filter ./apps/frontend build",
     "lint:backend": "pnpm --filter ./apps/backend lint"

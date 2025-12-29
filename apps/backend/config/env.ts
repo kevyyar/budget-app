@@ -4,6 +4,7 @@ export interface EnvConfig {
   supabaseUrl: string;
   supabaseAnonKey: string;
   supabaseServiceRoleKey?: string;
+  port: number;
   env: RuntimeEnv;
 }
 
@@ -18,6 +19,7 @@ const requireEnv = (name: string): string => {
 export const env: EnvConfig = {
   supabaseUrl: requireEnv('SUPABASE_URL'),
   supabaseAnonKey: requireEnv('SUPABASE_ANON_KEY'),
-  supabaseServiceRoleKey: requireEnv('SUPABASE_SERVICE_ROLE_KEY'),
-  env: requireEnv('ENV') ?? 'development'
+  supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
+  port: parseInt(process.env.PORT ?? '3001', 10),
+  env: process.env.ENV ?? 'development'
 };

@@ -2,6 +2,7 @@ import type { Budget, PaySchedule } from '../types/index.js';
 import { BaseRepository } from './baseRepository.js';
 
 export interface CreateBudgetInput {
+  user_id: string;
   name: string;
   period_start: string;
   period_end: string;
@@ -22,7 +23,7 @@ export class BudgetsRepository extends BaseRepository {
     const { data, error } = await this.client
       .from('budgets')
       .select('*')
-      .order('period_start', { ascending: false });
+      .order('created_at', { ascending: false });
 
     this.handleError(error);
     return (data ?? []) as Budget[];
