@@ -17,6 +17,7 @@
               <div class="amount-input-wrapper">
                 <span class="currency-symbol">$</span>
                 <input
+                  v-model="amount"
                   type="text"
                   class="amount-input"
                   placeholder="0.00"
@@ -37,6 +38,7 @@
             <div class="field">
               <label class="field-label">DESCRIPTION</label>
               <input
+                v-model="description"
                 type="text"
                 class="description-input"
                 placeholder="What did you spend on?"
@@ -78,7 +80,10 @@
           </div>
 
           <footer class="modal-footer">
-            <button class="submit-btn">Add Expense</button>
+            <p v-if="error" class="error-msg">{{ error }}</p>
+            <button class="submit-btn" :disabled="submitting" @click="handleSubmit">
+              {{ submitting ? 'Adding...' : 'Add Expense' }}
+            </button>
           </footer>
         </div>
       </div>
@@ -87,29 +92,113 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed, watch } from 'vue';
+import { useCategoriesStore } from '@/stores/categories';
+import { useExpensesStore } from '@/stores/expenses';
+import { useBudgetStore } from '@/stores/budget';
 
-defineProps<{
-  visible: boolean
-}>()
+const props = defineProps<{
+  visible: boolean;
+}>();
 
-defineEmits<{
-  close: []
-}>()
+const emit = defineEmits<{
+  close: [];
+  added: [];
+}>();
 
-const selectedCategory = ref('food')
-const isFixedExpense = ref(false)
+const categoriesStore = useCategoriesStore();
+const expensesStore = useExpensesStore();
+const budgetStore = useBudgetStore();
 
-const categories = [
-  { id: 'food', label: 'Food', icon: 'pi pi-shopping-bag', color: '#1a1a2e', bg: '#f87171' },
-  { id: 'transport', label: 'Transport', icon: 'pi pi-car', color: '#5eead4', bg: '#1e3a3a' },
-  { id: 'shopping', label: 'Shopping', icon: 'pi pi-calendar', color: '#c084fc', bg: '#2d1f3d' },
-  { id: 'bills', label: 'Bills', icon: 'pi pi-bolt', color: '#fbbf24', bg: '#2d2a1f' },
-  { id: 'housing', label: 'Housing', icon: 'pi pi-home', color: '#4ade80', bg: '#1f2d1f' },
-  { id: 'health', label: 'Health', icon: 'pi pi-heart', color: '#f472b6', bg: '#2d1f2a' },
-  { id: 'entertainment', label: 'Entertainment', icon: 'pi pi-mobile', color: '#60a5fa', bg: '#1f2a3d' },
-  { id: 'coffee', label: 'Coffee', icon: 'pi pi-star', color: '#f97316', bg: '#2d241f' },
-]
+const amount = ref('');
+const description = ref('');
+const selectedCategory = ref('');
+const isFixedExpense = ref(false);
+const submitting = ref(false);
+const error = ref('');
+
+const categories = computed(() =>
+  categoriesStore.items.map((cat) => {
+    const hex = cat.color.replace('#', '');
+    const r = parseInt(hex.slice(0, 2), 16);
+    const g = parseInt(hex.slice(2, 4), 16);
+    const b = parseInt(hex.slice(4, 6), 16);
+    return {
+      id: cat.id,
+      label: cat.name,
+      icon: cat.icon,
+      color: cat.color,
+      bg: `rgba(${r}, ${g}, ${b}, 0.15)`,
+    };
+  })
+);
+
+watch(() => props.visible, async (isVisible) => {
+  if (!isVisible) {
+    return;
+  }
+
+  if (categoriesStore.items.length === 0) {
+    categoriesStore.fetch();
+  }
+
+  if (!budgetStore.summary?.budget?.id) {
+    await budgetStore.fetchSummary();
+  }
+});
+
+function resetForm() {
+  amount.value = '';
+  description.value = '';
+  selectedCategory.value = '';
+  isFixedExpense.value = false;
+  error.value = '';
+}
+
+async function handleSubmit() {
+  error.value = '';
+
+  if (!budgetStore.summary?.budget?.id) {
+    await budgetStore.fetchSummary();
+  }
+
+  const amountNum = parseFloat(amount.value);
+  if (isNaN(amountNum) || amountNum <= 0) {
+    error.value = 'Enter a valid amount';
+    return;
+  }
+
+  if (!selectedCategory.value) {
+    error.value = 'Select a category';
+    return;
+  }
+
+  if (!budgetStore.summary?.budget.id) {
+    error.value = 'No active budget';
+    return;
+  }
+
+  submitting.value = true;
+
+  try {
+    await expensesStore.create({
+      budget_id: budgetStore.summary.budget.id,
+      category_id: selectedCategory.value,
+      amount: amountNum,
+      description: description.value || 'Expense',
+      is_fixed: isFixedExpense.value,
+    });
+
+    await budgetStore.fetchSummary();
+    resetForm();
+    emit('added');
+    emit('close');
+  } catch (e) {
+    error.value = (e as Error).message;
+  } finally {
+    submitting.value = false;
+  }
+}
 </script>
 
 <style scoped>
@@ -375,6 +464,13 @@ const categories = [
   padding: 1.5rem;
 }
 
+.error-msg {
+  color: #f87171;
+  font-size: 0.875rem;
+  margin: 0 0 0.75rem;
+  text-align: center;
+}
+
 .submit-btn {
   width: 100%;
   padding: 1rem;
@@ -396,6 +492,12 @@ const categories = [
 
 .submit-btn:active {
   transform: translateY(0);
+}
+
+.submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
 }
 
 /* Modal Transitions */

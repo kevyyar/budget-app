@@ -1,32 +1,55 @@
 <template>
   <div class="budget-page">
-    <BudgetHeader :payday="1" />
-    <BudgetCard :income="5600" :spent="1905" :days-remaining="4" />
-    <div class="expense-row">
-      <ExpenseSummaryCard
-        label="Variable"
-        :amount="334"
-        icon="pi pi-inbox"
-        icon-color="#ff6b6b"
-        icon-bg="rgba(255, 107, 107, 0.15)"
+    <template v-if="budgetStore.loading">
+      <div class="loading">Loading...</div>
+    </template>
+    <template v-else-if="budgetStore.error">
+      <div class="error">{{ budgetStore.error }}</div>
+    </template>
+    <template v-else-if="budgetStore.summary">
+      <BudgetHeader :period-end="budgetStore.summary.budget.period_end" />
+      <BudgetCard
+        :income="budgetStore.summary.income"
+        :spent="budgetStore.summary.spent"
+        :days-remaining="budgetStore.summary.daysRemaining"
       />
-      <ExpenseSummaryCard
-        label="Fixed"
-        :amount="1571"
-        icon="pi pi-home"
-        icon-color="#7c6bff"
-        icon-bg="rgba(124, 107, 255, 0.15)"
-      />
-    </div>
-    <RecentExpenses />
+      <div class="expense-row">
+        <ExpenseSummaryCard
+          label="Variable"
+          :amount="budgetStore.summary.variableAmount"
+          icon="pi pi-inbox"
+          icon-color="#ff6b6b"
+          icon-bg="rgba(255, 107, 107, 0.15)"
+        />
+        <ExpenseSummaryCard
+          label="Fixed"
+          :amount="budgetStore.summary.fixedAmount"
+          icon="pi pi-home"
+          icon-color="#7c6bff"
+          icon-bg="rgba(124, 107, 255, 0.15)"
+        />
+      </div>
+      <RecentExpenses :expenses="budgetStore.summary.recentExpenses" />
+    </template>
+    <template v-else>
+      <div class="no-budget">No active budget. Create one in Settings.</div>
+    </template>
   </div>
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue';
 import BudgetHeader from '@/components/BudgetHeader.vue';
 import BudgetCard from '@/components/BudgetCard.vue';
 import ExpenseSummaryCard from '@/components/ExpenseSummaryCard.vue';
 import RecentExpenses from '@/components/RecentExpenses.vue';
+import { useBudgetStore } from '@/stores/budget';
+
+const budgetStore = useBudgetStore();
+
+onMounted(() => {
+  budgetStore.fetchSummary();
+});
 </script>
 
 <style scoped>
@@ -39,5 +62,17 @@ import RecentExpenses from '@/components/RecentExpenses.vue';
   grid-template-columns: 1fr 1fr;
   gap: 0.75rem;
   margin-top: 0.75rem;
+}
+
+.loading,
+.error,
+.no-budget {
+  text-align: center;
+  padding: 2rem;
+  color: var(--color-text-muted);
+}
+
+.error {
+  color: #f87171;
 }
 </style>

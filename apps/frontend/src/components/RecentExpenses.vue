@@ -7,41 +7,42 @@
       </router-link>
     </header>
 
-    <ul class="expense-list">
+    <ul v-if="expenses.length" class="expense-list">
       <li v-for="expense in expenses" :key="expense.id" class="expense-item">
         <div class="icon-wrap" :style="getCategoryStyle(expense.category)">
-          <i :class="getCategoryIcon(expense.category)" />
+          <i :class="expense.category.icon" />
         </div>
         <div class="details">
-          <span class="name u-body">{{ expense.name }}</span>
-          <span class="category u-body">{{ expense.category }}</span>
+          <span class="name u-body">{{ expense.description }}</span>
+          <span class="category u-body">{{ expense.category.name }}</span>
         </div>
         <span class="amount u-amount">- ${{ formatAmount(expense.amount) }}</span>
       </li>
     </ul>
+    <p v-else class="empty u-body">No expenses yet</p>
   </section>
 </template>
 
 <script setup lang="ts">
-import { getCategoryIcon, getCategoryStyle } from '@/utils/categories';
+import type { ExpenseWithCategory } from '@/types';
 
-interface Expense {
-  id: number;
-  name: string;
-  category: string;
-  amount: number;
+defineProps<{
+  expenses: ExpenseWithCategory[];
+}>();
+
+function getCategoryStyle(category: { color: string }) {
+  const hex = category.color.replace('#', '');
+  const r = parseInt(hex.slice(0, 2), 16);
+  const g = parseInt(hex.slice(2, 4), 16);
+  const b = parseInt(hex.slice(4, 6), 16);
+  return {
+    backgroundColor: `rgba(${r}, ${g}, ${b}, 0.15)`,
+    color: category.color,
+  };
 }
 
-// Mock data - replace with actual data source later
-const expenses: Expense[] = [
-  { id: 1, name: 'Morning latte', category: 'Coffee & Drinks', amount: 12.50 },
-  { id: 2, name: 'Grocery run', category: 'Food & Dining', amount: 45.00 },
-  { id: 3, name: 'Lunch with friends', category: 'Food & Dining', amount: 28.50 },
-  { id: 4, name: 'Gas', category: 'Transport', amount: 32.00 }
-];
-
 function formatAmount(amount: number): string {
-  return amount.toFixed(2);
+  return Number(amount).toFixed(2);
 }
 </script>
 
@@ -137,5 +138,11 @@ function formatAmount(amount: number): string {
   font-size: 1rem;
   font-weight: 500;
   flex-shrink: 0;
+}
+
+.empty {
+  text-align: center;
+  color: var(--color-text-muted);
+  padding: 2rem;
 }
 </style>

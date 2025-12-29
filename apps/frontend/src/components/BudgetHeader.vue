@@ -14,11 +14,9 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-const props = withDefaults(defineProps<{
-  payday?: number;
-}>(), {
-  payday: 1
-});
+const props = defineProps<{
+  periodEnd: string;
+}>();
 
 const now = new Date();
 
@@ -31,19 +29,9 @@ const formattedDate = computed(() => {
 });
 
 const daysToPayday = computed(() => {
-  const today = now.getDate();
-  const currentMonth = now.getMonth();
-  const currentYear = now.getFullYear();
-
-  let targetDate: Date;
-  if (today < props.payday) {
-    targetDate = new Date(currentYear, currentMonth, props.payday);
-  } else {
-    targetDate = new Date(currentYear, currentMonth + 1, props.payday);
-  }
-
-  const diffTime = targetDate.getTime() - now.getTime();
-  return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  const endDate = new Date(props.periodEnd);
+  const diffTime = endDate.getTime() - now.getTime();
+  return Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
 });
 </script>
 
