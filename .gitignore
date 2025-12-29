@@ -15,3 +15,5 @@ apps/**/.vite/
 
 supabase/.temp/
 supabase/.branches/
+
+.claude/
