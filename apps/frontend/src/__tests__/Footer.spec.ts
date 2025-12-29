@@ -9,6 +9,14 @@ vi.mock('vue-router', () => ({
   useRoute: () => mockRoute.value,
 }))
 
+vi.mock('@/components/AddExpenseModal.vue', () => ({
+  default: {
+    name: 'AddExpenseModal',
+    props: ['visible'],
+    template: '<div class="add-expense-modal-mock" v-if="visible"></div>',
+  },
+}))
+
 vi.mock('primevue/tabs', () => ({
   default: {
     name: 'Tabs',

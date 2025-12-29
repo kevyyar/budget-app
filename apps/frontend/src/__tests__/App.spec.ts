@@ -3,7 +3,7 @@ import { mount, RouterLinkStub } from '@vue/test-utils'
 import App from '../App.vue'
 
 vi.mock('vue-router', () => ({
-  useRoute: () => ({ path: '/' }),
+  useRoute: () => ({ path: '/', meta: { public: false } }),
 }))
 
 vi.mock('primevue/tabs', () => ({
@@ -16,6 +16,14 @@ vi.mock('primevue/tablist', () => ({
 
 vi.mock('primevue/tab', () => ({
   default: { template: '<div><slot /></div>' },
+}))
+
+vi.mock('@/components/AddExpenseModal.vue', () => ({
+  default: {
+    name: 'AddExpenseModal',
+    props: ['visible'],
+    template: '<div class="add-expense-modal-mock" v-if="visible"></div>',
+  },
 }))
 
 describe('App', () => {
