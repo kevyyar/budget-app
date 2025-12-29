@@ -3,6 +3,12 @@
   --font-headline: 'Manrope', sans-serif;
   --font-body: 'Inter', sans-serif;
   --font-mono: 'Roboto Mono', monospace;
+
+  --color-bg: #101426;
+  --color-card: linear-gradient(145deg, #1e2a38 0%, #151c25 100%);
+  --color-accent: #2afc98;
+  --color-text: #fff;
+  --color-text-muted: rgba(255, 255, 255, 0.5);
 }
 
 /* ----------  LAYOUT  ---------- */
@@ -10,6 +16,7 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
+  background-color: var(--color-bg);
 }
 
 #app {

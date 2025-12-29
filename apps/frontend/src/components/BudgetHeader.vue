@@ -60,7 +60,7 @@ const daysToPayday = computed(() => {
 }
 
 .date-display {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--color-text-muted);
   font-size: 0.875rem;
 }
 
@@ -69,9 +69,9 @@ const daysToPayday = computed(() => {
   align-items: center;
   gap: 0.5rem;
   padding: 0.375rem 0.75rem;
-  border: 1px solid rgba(42, 252, 152, 0.4);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 40%, transparent);
   border-radius: 999px;
-  color: #2afc98;
+  color: var(--color-accent);
   font-family: var(--font-body);
   font-size: 0.75rem;
   font-weight: 500;
@@ -84,7 +84,7 @@ const daysToPayday = computed(() => {
 .title {
   margin: 0;
   font-size: 1.75rem;
-  color: #fff;
+  color: var(--color-text);
   font-weight: 700;
 }
 </style>
