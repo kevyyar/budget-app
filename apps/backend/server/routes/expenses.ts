@@ -1,5 +1,10 @@
 import { Hono } from 'hono';
 import { getAppContext } from '../context.js';
+import type { Expense, Category } from '../../types/index.js';
+
+export interface ExpenseWithCategory extends Expense {
+  category: Category;
+}
 
 const app = new Hono();
 
@@ -18,7 +23,25 @@ app.get('/', async (c) => {
       expenses = expenses.slice(0, parseInt(limit, 10));
     }
 
-    return c.json(expenses);
+    const categories = await repos.categories.listCategories();
+    const categoryMap = new Map(categories.map((cat) => [cat.id, cat]));
+
+    const expensesWithCategory: ExpenseWithCategory[] = expenses.map((expense) => ({
+      ...expense,
+      category: categoryMap.get(expense.category_id) ?? {
+        id: expense.category_id,
+        user_id: null,
+        slug: 'other',
+        name: 'Other',
+        color: '#6b7280',
+        icon: 'pi pi-tag',
+        sort_order: 99,
+        created_at: '',
+        updated_at: '',
+      },
+    }));
+
+    return c.json(expensesWithCategory);
   } catch (error) {
     return c.json({ error: (error as Error).message }, 500);
   }

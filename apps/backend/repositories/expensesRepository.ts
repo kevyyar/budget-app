@@ -30,7 +30,11 @@ export interface ExpenseFilters {
 
 export class ExpensesRepository extends BaseRepository {
   async listExpenses(filters: ExpenseFilters = {}): Promise<Expense[]> {
-    let query = this.client.from('expenses').select('*').order('expense_date', { ascending: false });
+    let query = this.client
+      .from('expenses')
+      .select('*')
+      .order('expense_date', { ascending: false })
+      .order('created_at', { ascending: false });
 
     if (filters.budget_id) {
       query = query.eq('budget_id', filters.budget_id);
