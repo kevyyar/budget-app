@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import type { DashboardSummary } from '@/types';
 import { api } from '@/lib/api';
+import { useAnalyticsStore } from './analytics';
 
 export const useBudgetStore = defineStore('budget', () => {
   const summary = ref<DashboardSummary | null>(null);
@@ -27,6 +28,16 @@ export const useBudgetStore = defineStore('budget', () => {
       loading.value = false;
     }
   }
+
+  watch(
+    () => summary.value?.budget?.id,
+    (newId, oldId) => {
+      if (newId !== oldId) {
+        const analyticsStore = useAnalyticsStore();
+        analyticsStore.clearCache();
+      }
+    }
+  );
 
   return {
     summary,

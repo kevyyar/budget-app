@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import type { Expense, ExpenseWithCategory, Category } from '@/types';
 import { api } from '@/lib/api';
+import { useAnalyticsStore } from './analytics';
 
 export interface CreateExpenseInput {
   budget_id: string;
@@ -80,12 +81,16 @@ export const useExpensesStore = defineStore('expenses', () => {
   async function create(input: CreateExpenseInput): Promise<Expense> {
     const expense = await api.post<Expense>('/api/expenses', input);
     await fetch(input.budget_id);
+    const analyticsStore = useAnalyticsStore();
+    analyticsStore.clearCache();
     return expense;
   }
 
   async function remove(id: string) {
     await api.delete(`/api/expenses/${id}`);
     items.value = items.value.filter((e) => e.id !== id);
+    const analyticsStore = useAnalyticsStore();
+    analyticsStore.clearCache();
   }
 
   function setFilter(filter: ExpenseFilter) {
