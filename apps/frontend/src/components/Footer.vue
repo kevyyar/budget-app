@@ -70,10 +70,10 @@ const currentRoute = computed(() => route.path);
 const showModal = ref(false);
 
 const items = ref([
-    { route: '/budget', label: 'Budget', icon: 'pi pi-wallet', class: '' },
-    { route: '/analytics', label: 'Analytics', icon: 'pi pi-chart-line', class: '' },
-    { route: '', label: 'Add', icon: 'pi pi-plus', class: 'add' },
-    { route: '/expenses', label: 'Expenses', icon: 'pi pi-inbox', class: '' },
-    { route: '/settings', label: 'Settings', icon: 'pi pi-cog', class: '' },
+    { route: '/budget', label: 'Presupuesto', icon: 'pi pi-wallet', class: '' },
+    { route: '/analytics', label: 'Analíticas', icon: 'pi pi-chart-line', class: '' },
+    { route: '', label: 'Agregar', icon: 'pi pi-plus', class: 'add' },
+    { route: '/expenses', label: 'Gastos', icon: 'pi pi-inbox', class: '' },
+    { route: '/settings', label: 'Ajustes', icon: 'pi pi-cog', class: '' },
 ]);
 </script>

@@ -4,7 +4,7 @@
       <div v-if="visible" class="modal-overlay" @click.self="$emit('close')">
         <div class="modal-container">
           <header class="modal-header">
-            <h2 class="modal-title">Add Expense</h2>
+            <h2 class="modal-title">Agregar Gasto</h2>
             <button class="close-btn" @click="$emit('close')">
               <i class="pi pi-times" />
             </button>
@@ -13,7 +13,7 @@
           <div class="modal-body">
             <!-- Amount Input -->
             <div class="field">
-              <label class="field-label">AMOUNT</label>
+              <label class="field-label">MONTO</label>
               <div class="amount-input-wrapper">
                 <span class="currency-symbol">$</span>
                 <input
@@ -36,18 +36,18 @@
 
             <!-- Description Input -->
             <div class="field">
-              <label class="field-label">DESCRIPTION</label>
+              <label class="field-label">DESCRIPCIÓN</label>
               <input
                 v-model="description"
                 type="text"
                 class="description-input"
-                placeholder="What did you spend on?"
+                placeholder="¿En qué gastaste?"
               />
             </div>
 
             <!-- Category Selection -->
             <div class="field">
-              <label class="field-label">CATEGORY</label>
+              <label class="field-label">CATEGORÍA</label>
               <div class="category-grid">
                 <button
                   v-for="cat in categories"
@@ -67,8 +67,8 @@
             <!-- Fixed Expense Toggle -->
             <div class="fixed-expense-row">
               <div class="fixed-expense-info">
-                <span class="fixed-expense-title">Fixed Expense</span>
-                <span class="fixed-expense-desc">Recurring bills like rent, subscriptions</span>
+                <span class="fixed-expense-title">Gasto Fijo</span>
+                <span class="fixed-expense-desc">Gastos recurrentes como renta, suscripciones</span>
               </div>
               <button
                 :class="['toggle-btn', { active: isFixedExpense }]"
@@ -82,7 +82,7 @@
           <footer class="modal-footer">
             <p v-if="error" class="error-msg">{{ error }}</p>
             <button class="submit-btn" :disabled="submitting" @click="handleSubmit">
-              {{ submitting ? 'Adding...' : 'Add Expense' }}
+              {{ submitting ? 'Agregando...' : 'Agregar Gasto' }}
             </button>
           </footer>
         </div>
@@ -92,10 +92,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
+import { useBudgetStore } from '@/stores/budget';
 import { useCategoriesStore } from '@/stores/categories';
 import { useExpensesStore } from '@/stores/expenses';
-import { useBudgetStore } from '@/stores/budget';
+import { computed, ref, watch } from 'vue';
 
 const props = defineProps<{
   visible: boolean;
@@ -164,17 +164,17 @@ async function handleSubmit() {
 
   const amountNum = parseFloat(amount.value);
   if (isNaN(amountNum) || amountNum <= 0) {
-    error.value = 'Enter a valid amount';
+    error.value = 'Ingresa un monto válido';
     return;
   }
 
   if (!selectedCategory.value) {
-    error.value = 'Select a category';
+    error.value = 'Selecciona una categoría';
     return;
   }
 
   if (!budgetStore.summary?.budget.id) {
-    error.value = 'No active budget';
+    error.value = 'Sin presupuesto activo';
     return;
   }
 

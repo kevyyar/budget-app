@@ -4,10 +4,10 @@
       <time class="date-display u-body">{{ formattedDate }}</time>
       <div class="payday-badge">
         <i class="pi pi-calendar" />
-        <span>{{ daysToPayday }} days to payday</span>
+        <span>{{ daysToPayday }} días para pago</span>
       </div>
     </div>
-    <h1 class="title u-headline">Your Budget</h1>
+    <h1 class="title u-headline">Tu Presupuesto</h1>
   </header>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="u-headline">Analytics</h1>
+    <h1 class="u-headline">Analíticas</h1>
   </div>
 </template>
 

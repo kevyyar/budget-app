@@ -1,9 +1,9 @@
 <template>
   <section class="recent-expenses">
     <header class="section-header">
-      <h2 class="title u-headline">Recent Expenses</h2>
+      <h2 class="title u-headline">Gastos Recientes</h2>
       <router-link to="/expenses" class="see-all u-body">
-        See all <i class="pi pi-chevron-right" />
+        Ver todos <i class="pi pi-chevron-right" />
       </router-link>
     </header>
 
@@ -19,7 +19,7 @@
         <span class="amount u-amount">- ${{ formatAmount(expense.amount) }}</span>
       </li>
     </ul>
-    <p v-else class="empty u-body">No expenses yet</p>
+    <p v-else class="empty u-body">Sin gastos aún</p>
   </section>
 </template>
 

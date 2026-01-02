@@ -1,8 +1,8 @@
 <template>
   <div class="expenses-page">
     <header class="page-header">
-      <h1 class="page-title u-headline">Expenses</h1>
-      <p class="page-subtitle">track every dollar</p>
+      <h1 class="page-title u-headline">Gastos</h1>
+      <p class="page-subtitle">registra cada peso</p>
     </header>
 
     <nav class="filter-pills">
@@ -10,19 +10,19 @@
         :class="['filter-pill', { active: expensesStore.currentFilter === 'all' }]"
         @click="expensesStore.setFilter('all')"
       >
-        All
+        Todos
       </button>
       <button
         :class="['filter-pill', { active: expensesStore.currentFilter === 'fixed' }]"
         @click="expensesStore.setFilter('fixed')"
       >
-        Fixed
+        Fijos
       </button>
       <button
         :class="['filter-pill', { active: expensesStore.currentFilter === 'variable' }]"
         @click="expensesStore.setFilter('variable')"
       >
-        Variable
+        Variables
       </button>
       <button
         v-for="category in categoriesStore.items"
@@ -35,7 +35,7 @@
     </nav>
 
     <template v-if="expensesStore.loading">
-      <div class="loading">Loading...</div>
+      <div class="loading">Cargando...</div>
     </template>
     <template v-else-if="expensesStore.error">
       <div class="error">{{ expensesStore.error }}</div>
@@ -58,7 +58,7 @@
           </button>
         </li>
       </ul>
-      <p v-else class="empty u-body">No expenses found</p>
+      <p v-else class="empty u-body">No se encontraron gastos</p>
 
       <nav v-if="expensesStore.items.length" class="pagination">
         <button
@@ -67,15 +67,15 @@
           @click="expensesStore.prevPage"
         >
           <i class="pi pi-chevron-left" />
-          Prev
+          Anterior
         </button>
-        <span class="pagination-page">Page {{ expensesStore.currentPage + 1 }}</span>
+        <span class="pagination-page">Página {{ expensesStore.currentPage + 1 }}</span>
         <button
           class="pagination-btn"
           :disabled="!expensesStore.hasNextPage"
           @click="expensesStore.nextPage"
         >
-          Next
+          Siguiente
           <i class="pi pi-chevron-right" />
         </button>
       </nav>
@@ -84,11 +84,11 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
-import { useExpensesStore } from '@/stores/expenses';
-import { useCategoriesStore } from '@/stores/categories';
 import { useBudgetStore } from '@/stores/budget';
+import { useCategoriesStore } from '@/stores/categories';
+import { useExpensesStore } from '@/stores/expenses';
 import type { Category } from '@/types';
+import { onMounted } from 'vue';
 
 const expensesStore = useExpensesStore();
 const categoriesStore = useCategoriesStore();
@@ -129,7 +129,7 @@ function formatDate(dateStr: string): string {
 }
 
 async function handleDelete(id: string) {
-  if (confirm('Delete this expense?')) {
+  if (confirm('¿Eliminar este gasto?')) {
     await expensesStore.remove(id);
     await budgetStore.fetchSummary();
   }

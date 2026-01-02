@@ -1,9 +1,9 @@
 <template>
   <div class="settings-page">
-    <h1 class="u-headline">Settings</h1>
+    <h1 class="u-headline">Ajustes</h1>
 
     <section class="section">
-      <h2 class="section-title">Budget</h2>
+      <h2 class="section-title">Presupuesto</h2>
 
       <div v-if="displayBudget" class="current-budget">
         <div class="budget-info">
@@ -17,7 +17,7 @@
       </div>
 
       <div v-if="budgets.length" class="budget-history">
-        <h3 class="history-title">Budget History</h3>
+        <h3 class="history-title">Historial de presupuestos</h3>
         <ul class="history-list">
           <li v-for="budget in budgets" :key="budget.id" class="history-item">
             <div class="history-info">
@@ -35,18 +35,18 @@
       <form @submit.prevent="handleCreateBudget" class="budget-form">
         <div class="form-row">
           <div class="field">
-            <label for="name" class="label">Name</label>
+            <label for="name" class="label">Nombre</label>
             <input
               id="name"
               v-model="form.name"
               type="text"
               class="input"
-              placeholder="January 2025"
+              placeholder="Enero 2025"
               required
             />
           </div>
           <div class="field">
-            <label for="income" class="label">Income per pay</label>
+            <label for="income" class="label">Ingresos por pago</label>
             <input
               id="income"
               v-model.number="form.income_per_pay"
@@ -62,7 +62,7 @@
 
         <div class="form-row">
           <div class="field">
-            <label for="start" class="label">Period start</label>
+            <label for="start" class="label">Inicio del período</label>
             <input
               id="start"
               v-model="form.period_start"
@@ -72,7 +72,7 @@
             />
           </div>
           <div class="field">
-            <label for="end" class="label">Period end</label>
+            <label for="end" class="label">Fin del período</label>
             <input
               id="end"
               v-model="form.period_end"
@@ -84,11 +84,11 @@
         </div>
 
         <div class="field">
-          <label for="schedule" class="label">Pay schedule</label>
+          <label for="schedule" class="label">Horario de pagos</label>
           <select id="schedule" v-model="form.pay_schedule" class="input" required>
-            <option value="weekly">Weekly</option>
-            <option value="biweekly">Biweekly</option>
-            <option value="monthly">Monthly</option>
+            <option value="weekly">Semanal</option>
+            <option value="biweekly">Quincenal</option>
+            <option value="monthly">Mensual</option>
           </select>
         </div>
 
@@ -96,24 +96,24 @@
         <p v-if="success" class="success">{{ success }}</p>
 
         <button type="submit" class="submit-btn" :disabled="loading">
-          {{ loading ? 'Creating...' : 'Create Budget' }}
+          {{ loading ? 'Creando...' : 'Crear Presupuesto' }}
         </button>
       </form>
     </section>
 
     <section class="section">
-      <h2 class="section-title">Account</h2>
-      <button @click="handleLogout" class="logout-btn">Sign Out</button>
+      <h2 class="section-title">Cuenta</h2>
+      <button @click="handleLogout" class="logout-btn">Cerrar Sesión</button>
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, computed } from 'vue';
-import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/stores/auth';
 import { api } from '@/lib/api';
+import { useAuthStore } from '@/stores/auth';
 import type { Budget, PaySchedule } from '@/types';
+import { computed, onMounted, reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const auth = useAuthStore();
@@ -159,15 +159,15 @@ function todayString(): string {
 
 function getBudgetStatus(budget: Budget) {
   const today = todayString();
-  if (budget.period_start <= today && budget.period_end >= today) return 'Active';
-  if (today < budget.period_start) return 'Upcoming';
-  return 'Past';
+  if (budget.period_start <= today && budget.period_end >= today) return 'Activo';
+  if (today < budget.period_start) return 'Próximo';
+  return 'Pasado';
 }
 
 const budgetStatusLabel = computed(() => {
-  if (budgetStatus.value === 'upcoming') return 'Upcoming budget';
-  if (budgetStatus.value === 'recent') return 'Most recent budget';
-  return 'Active budget';
+  if (budgetStatus.value === 'upcoming') return 'Próximo presupuesto';
+  if (budgetStatus.value === 'recent') return 'Presupuesto más reciente';
+  return 'Presupuesto activo';
 });
 
 async function fetchBudgets() {
@@ -207,7 +207,7 @@ async function handleCreateBudget() {
 
   try {
     await api.post<Budget>('/api/budgets', form);
-    success.value = 'Budget created!';
+    success.value = '¡Presupuesto creado!';
     await fetchBudgets();
     form.name = '';
     form.income_per_pay = 0;

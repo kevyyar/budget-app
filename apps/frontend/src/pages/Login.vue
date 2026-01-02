@@ -1,47 +1,47 @@
 <template>
   <div class="auth-page">
     <div class="auth-card">
-      <h1 class="title u-headline">Sign In</h1>
+      <h1 class="title u-headline">Iniciar Sesión</h1>
       <form @submit.prevent="handleSubmit" class="auth-form">
         <div class="field">
-          <label for="email" class="label u-body">Email</label>
+          <label for="email" class="label u-body">Correo electrónico</label>
           <input
             id="email"
             v-model="email"
             type="email"
             class="input"
-            placeholder="you@example.com"
+            placeholder="tu@ejemplo.com"
             required
           />
         </div>
         <div class="field">
-          <label for="password" class="label u-body">Password</label>
+          <label for="password" class="label u-body">Contraseña</label>
           <input
             id="password"
             v-model="password"
             type="password"
             class="input"
-            placeholder="Your password"
+            placeholder="Tu contraseña"
             required
           />
         </div>
         <p v-if="error" class="error u-body">{{ error }}</p>
         <button type="submit" class="submit-btn" :disabled="loading">
-          {{ loading ? 'Signing in...' : 'Sign In' }}
+          {{ loading ? 'Iniciando...' : 'Iniciar Sesión' }}
         </button>
       </form>
       <p class="switch-link u-body">
-        Don't have an account?
-        <router-link to="/signup">Sign up</router-link>
+        ¿No tienes una cuenta?
+        <router-link to="/signup">Regístrate</router-link>
       </p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { useAuthStore } from '@/stores/auth';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/stores/auth';
 
 const router = useRouter();
 const auth = useAuthStore();

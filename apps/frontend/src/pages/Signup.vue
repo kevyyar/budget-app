@@ -1,60 +1,60 @@
 <template>
   <div class="auth-page">
     <div class="auth-card">
-      <h1 class="title u-headline">Create Account</h1>
+      <h1 class="title u-headline">Crear Cuenta</h1>
       <form @submit.prevent="handleSubmit" class="auth-form">
         <div class="field">
-          <label for="email" class="label u-body">Email</label>
+          <label for="email" class="label u-body">Correo electrónico</label>
           <input
             id="email"
             v-model="email"
             type="email"
             class="input"
-            placeholder="you@example.com"
+            placeholder="tu@ejemplo.com"
             required
           />
         </div>
         <div class="field">
-          <label for="password" class="label u-body">Password</label>
+          <label for="password" class="label u-body">Contraseña</label>
           <input
             id="password"
             v-model="password"
             type="password"
             class="input"
-            placeholder="Min 6 characters"
+            placeholder="Mínimo 6 caracteres"
             minlength="6"
             required
           />
         </div>
         <div class="field">
-          <label for="confirmPassword" class="label u-body">Confirm Password</label>
+          <label for="confirmPassword" class="label u-body">Confirmar contraseña</label>
           <input
             id="confirmPassword"
             v-model="confirmPassword"
             type="password"
             class="input"
-            placeholder="Repeat password"
+            placeholder="Repite la contraseña"
             required
           />
         </div>
         <p v-if="error" class="error u-body">{{ error }}</p>
         <p v-if="success" class="success u-body">{{ success }}</p>
         <button type="submit" class="submit-btn" :disabled="loading">
-          {{ loading ? 'Creating...' : 'Create Account' }}
+          {{ loading ? 'Creando...' : 'Crear Cuenta' }}
         </button>
       </form>
       <p class="switch-link u-body">
-        Already have an account?
-        <router-link to="/login">Sign in</router-link>
+        ¿Ya tienes una cuenta?
+        <router-link to="/login">Inicia sesión</router-link>
       </p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { useAuthStore } from '@/stores/auth';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/stores/auth';
 
 const router = useRouter();
 const auth = useAuthStore();
@@ -71,7 +71,7 @@ async function handleSubmit() {
   success.value = '';
 
   if (password.value !== confirmPassword.value) {
-    error.value = 'Passwords do not match';
+    error.value = 'Las contraseñas no coinciden';
     return;
   }
 
@@ -79,7 +79,7 @@ async function handleSubmit() {
 
   try {
     await auth.signup(email.value, password.value);
-    success.value = 'Account created! Check your email to confirm.';
+    success.value = '¡Cuenta creada! Revisa tu correo para confirmar.';
     setTimeout(() => router.push('/login'), 2000);
   } catch (e) {
     error.value = (e as Error).message;

@@ -1,6 +1,6 @@
 <template>
   <article class="budget-card">
-    <span class="label u-body">Remaining Budget</span>
+    <span class="label u-body">Presupuesto Restante</span>
     <div class="amount-row">
       <span class="currency u-amount">$</span>
       <span class="amount u-amount">{{ formattedRemaining }}</span>
@@ -10,13 +10,13 @@
         <div class="progress-fill" :style="{ width: spentPercentage + '%' }" />
       </div>
       <div class="progress-labels">
-        <span class="u-body">${{ spent.toLocaleString() }} spent</span>
-        <span class="u-body">${{ income.toLocaleString() }} income</span>
+        <span class="u-body">${{ spent.toLocaleString() }} gastado</span>
+        <span class="u-body">${{ income.toLocaleString() }} ingreso</span>
       </div>
     </div>
     <div class="daily-budget">
       <span class="dollar-icon u-amount">$</span>
-      <span class="daily-text u-body">Daily budget: <strong class="u-amount">${{ formattedDaily }}</strong></span>
+      <span class="daily-text u-body">Presupuesto diario: <strong class="u-amount">${{ formattedDaily }}</strong></span>
     </div>
   </article>
 </template>

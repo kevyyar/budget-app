@@ -1,7 +1,7 @@
 <template>
   <div class="budget-page">
     <template v-if="budgetStore.loading">
-      <div class="loading">Loading...</div>
+      <div class="loading">Cargando...</div>
     </template>
     <template v-else-if="budgetStore.error">
       <div class="error">{{ budgetStore.error }}</div>
@@ -22,7 +22,7 @@
           icon-bg="rgba(255, 107, 107, 0.15)"
         />
         <ExpenseSummaryCard
-          label="Fixed"
+          label="Fijo"
           :amount="budgetStore.summary.fixedAmount"
           icon="pi pi-home"
           icon-color="#7c6bff"
@@ -32,18 +32,18 @@
       <RecentExpenses :expenses="budgetStore.summary.recentExpenses" />
     </template>
     <template v-else>
-      <div class="no-budget">No active budget. Create one in Settings.</div>
+      <div class="no-budget">Sin presupuesto activo. Crea uno en Ajustes.</div>
     </template>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
-import BudgetHeader from '@/components/BudgetHeader.vue';
 import BudgetCard from '@/components/BudgetCard.vue';
+import BudgetHeader from '@/components/BudgetHeader.vue';
 import ExpenseSummaryCard from '@/components/ExpenseSummaryCard.vue';
 import RecentExpenses from '@/components/RecentExpenses.vue';
 import { useBudgetStore } from '@/stores/budget';
+import { onMounted } from 'vue';
 
 const budgetStore = useBudgetStore();
 
