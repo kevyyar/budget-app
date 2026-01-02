@@ -173,6 +173,11 @@ async function handleSubmit() {
     return;
   }
 
+  if (!description.value.trim()) {
+    error.value = 'Ingresa una descripción';
+    return;
+  }
+
   if (!budgetStore.summary?.budget.id) {
     error.value = 'Sin presupuesto activo';
     return;
@@ -185,7 +190,7 @@ async function handleSubmit() {
       budget_id: budgetStore.summary.budget.id,
       category_id: selectedCategory.value,
       amount: amountNum,
-      description: description.value || 'Expense',
+      description: description.value,
       is_fixed: isFixedExpense.value,
     });
 
