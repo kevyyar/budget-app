@@ -21,7 +21,7 @@ const props = defineProps<{
 const now = new Date();
 
 const formattedDate = computed(() => {
-  return now.toLocaleDateString('en-US', {
+  return now.toLocaleDateString('es-MX', {
     weekday: 'long',
     month: 'short',
     day: 'numeric'

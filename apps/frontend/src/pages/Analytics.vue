@@ -1,8 +1,8 @@
 <template>
   <div class="analytics-page u-container">
     <header class="page-header">
-      <h1 class="title u-headline">Analytics</h1>
-      <p class="subtitle u-body">Understand your spending</p>
+      <h1 class="title u-headline">Análisis</h1>
+      <p class="subtitle u-body">Entiende tus gastos</p>
     </header>
 
     <div class="period-selector">
@@ -20,7 +20,7 @@
       <template #content>
         <div class="card-content">
           <template v-if="analyticsStore.loading">
-            <span class="card-label u-body">Loading...</span>
+            <span class="card-label u-body">Cargando...</span>
             <div class="amount-display">
               <ProgressSpinner class="loading-spinner" />
             </div>
@@ -61,9 +61,9 @@ interface Period {
 }
 
 const periods: Period[] = [
-  { value: 'daily', label: 'Daily' },
-  { value: 'weekly', label: 'Weekly' },
-  { value: 'monthly', label: 'Monthly' },
+  { value: 'daily', label: 'Diario' },
+  { value: 'weekly', label: 'Semanal' },
+  { value: 'monthly', label: 'Mensual' },
 ];
 
 const analyticsStore = useAnalyticsStore();
@@ -89,19 +89,19 @@ watch(
 const spendingLabel = computed(() => {
   switch (analyticsStore.selectedPeriod) {
     case 'daily':
-      return 'Today Spending';
+      return 'Gastos de hoy';
     case 'weekly':
-      return 'This Week Spending';
+      return 'Gastos de esta semana';
     case 'monthly':
-      return 'This Month Spending';
+      return 'Gastos de este mes';
     default:
-      return 'Spending';
+      return 'Gastos';
   }
 });
 
 const formattedAmount = computed(() => {
   const amount = analyticsStore.summary?.total_amount ?? 0;
-  return amount.toLocaleString('en-US', {
+  return amount.toLocaleString('es-MX', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
