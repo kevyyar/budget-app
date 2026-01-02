@@ -14,9 +14,17 @@ import expensesRoutes from './routes/expenses.js';
 const app = new Hono();
 
 app.use('*', logger());
+const defaultCorsOrigins = ['http://localhost:5173', 'http://localhost:4173'];
+const configuredCorsOrigins = env.corsOrigins.length > 0 ? env.corsOrigins : defaultCorsOrigins;
+
 app.use('*', cors({
-  origin: ['http://localhost:5173', 'http://localhost:4173'],
-  credentials: true,
+  origin: (origin) => {
+    if (!origin) return null;
+    if (configuredCorsOrigins.includes(origin)) return origin;
+    if (env.allowVercelPreview && origin.endsWith('.vercel.app')) return origin;
+    return null;
+  },
+  credentials: false,
 }));
 
 app.get('/health', (c) => c.json({ status: 'ok' }));

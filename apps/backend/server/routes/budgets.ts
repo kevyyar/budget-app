@@ -3,6 +3,15 @@ import { getAppContext } from '../context.js';
 
 const app = new Hono();
 
+const isNonEmptyString = (value: unknown): value is string =>
+  typeof value === 'string' && value.trim().length > 0;
+
+const isFiniteNumber = (value: unknown): value is number =>
+  typeof value === 'number' && Number.isFinite(value);
+
+const isPaySchedule = (value: unknown): value is 'weekly' | 'biweekly' | 'monthly' =>
+  value === 'weekly' || value === 'biweekly' || value === 'monthly';
+
 app.get('/', async (c) => {
   const { repos } = getAppContext(c);
 
@@ -54,9 +63,40 @@ app.post('/', async (c) => {
   const { repos, user } = getAppContext(c);
 
   try {
-    const body = await c.req.json();
+    const body = await c.req.json().catch(() => null);
+
+    if (!body || typeof body !== 'object') {
+      return c.json({ error: 'Invalid JSON body' }, 400);
+    }
+
+    const name = (body as { name?: unknown }).name;
+    const periodStart = (body as { period_start?: unknown }).period_start;
+    const periodEnd = (body as { period_end?: unknown }).period_end;
+    const paySchedule = (body as { pay_schedule?: unknown }).pay_schedule;
+    const incomePerPay = (body as { income_per_pay?: unknown }).income_per_pay;
+
+    if (!isNonEmptyString(name)) {
+      return c.json({ error: 'name is required' }, 400);
+    }
+    if (!isNonEmptyString(periodStart)) {
+      return c.json({ error: 'period_start is required' }, 400);
+    }
+    if (!isNonEmptyString(periodEnd)) {
+      return c.json({ error: 'period_end is required' }, 400);
+    }
+    if (!isPaySchedule(paySchedule)) {
+      return c.json({ error: 'pay_schedule must be weekly, biweekly, or monthly' }, 400);
+    }
+    if (!isFiniteNumber(incomePerPay) || incomePerPay < 0) {
+      return c.json({ error: 'income_per_pay must be a non-negative number' }, 400);
+    }
+
     const budget = await repos.budgets.createBudget({
-      ...body,
+      name,
+      period_start: periodStart,
+      period_end: periodEnd,
+      pay_schedule: paySchedule,
+      income_per_pay: incomePerPay,
       user_id: user.id,
     });
     return c.json(budget, 201);
