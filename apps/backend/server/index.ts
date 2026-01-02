@@ -4,11 +4,12 @@ import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 import { env } from '../config/env.js';
 import { authMiddleware } from './middleware/auth.js';
+import analyticsRoutes from './routes/analytics.js';
 import authRoutes from './routes/auth.js';
-import categoriesRoutes from './routes/categories.js';
 import budgetsRoutes from './routes/budgets.js';
-import expensesRoutes from './routes/expenses.js';
+import categoriesRoutes from './routes/categories.js';
 import dashboardRoutes from './routes/dashboard.js';
+import expensesRoutes from './routes/expenses.js';
 
 const app = new Hono();
 
@@ -27,6 +28,7 @@ api.route('/categories', categoriesRoutes);
 api.route('/budgets', budgetsRoutes);
 api.route('/expenses', expensesRoutes);
 api.route('/dashboard', dashboardRoutes);
+api.route('/analytics', analyticsRoutes);
 
 app.route('/api', api);
 

@@ -56,3 +56,15 @@ export interface DashboardSummary {
   variableAmount: number;
   recentExpenses: ExpenseWithCategory[];
 }
+
+export type AnalyticsPeriod = 'daily' | 'weekly' | 'monthly';
+
+export interface AnalyticsSummary {
+  period: AnalyticsPeriod;
+  start_date: string;
+  end_date: string;
+  total_amount: number;
+  fixed_amount: number;
+  variable_amount: number;
+  expense_count: number;
+}
