@@ -26,6 +26,8 @@ export interface ExpenseFilters {
   start_date?: string;
   end_date?: string;
   is_fixed?: boolean;
+  limit?: number;
+  offset?: number;
 }
 
 export class ExpensesRepository extends BaseRepository {
@@ -50,6 +52,12 @@ export class ExpensesRepository extends BaseRepository {
     }
     if (filters.is_fixed !== undefined) {
       query = query.eq('is_fixed', filters.is_fixed);
+    }
+
+    if (filters.limit !== undefined) {
+      const from = filters.offset ?? 0;
+      const to = from + filters.limit - 1;
+      query = query.range(from, to);
     }
 
     const { data, error } = await query;

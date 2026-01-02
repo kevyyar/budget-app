@@ -14,11 +14,16 @@ export interface CreateExpenseInput {
 
 export type ExpenseFilter = 'all' | 'fixed' | 'variable' | Category['id'];
 
+const PAGE_SIZE = 6;
+
 export const useExpensesStore = defineStore('expenses', () => {
   const items = ref<ExpenseWithCategory[]>([]);
   const loading = ref(false);
   const error = ref<string | null>(null);
   const currentFilter = ref<ExpenseFilter>('all');
+  const currentPage = ref(0);
+  const hasNextPage = ref(false);
+  const currentBudgetId = ref<string | undefined>();
 
   const filteredExpenses = computed(() => {
     if (currentFilter.value === 'all') {
@@ -33,17 +38,42 @@ export const useExpensesStore = defineStore('expenses', () => {
     return items.value.filter((e) => e.category_id === currentFilter.value);
   });
 
-  async function fetch(budgetId?: string) {
+  interface PaginatedResponse {
+    items: ExpenseWithCategory[];
+    hasNextPage: boolean;
+  }
+
+  async function fetch(budgetId?: string, page = 0) {
     loading.value = true;
     error.value = null;
+    currentBudgetId.value = budgetId;
+    currentPage.value = page;
 
     try {
-      const query = budgetId ? `?budget_id=${budgetId}` : '';
-      items.value = await api.get<ExpenseWithCategory[]>(`/api/expenses${query}`);
+      const params = new URLSearchParams();
+      if (budgetId) params.set('budget_id', budgetId);
+      params.set('limit', PAGE_SIZE.toString());
+      params.set('offset', (page * PAGE_SIZE).toString());
+
+      const response = await api.get<PaginatedResponse>(`/api/expenses?${params}`);
+      items.value = response.items;
+      hasNextPage.value = response.hasNextPage;
     } catch (e) {
       error.value = (e as Error).message;
     } finally {
       loading.value = false;
+    }
+  }
+
+  async function nextPage() {
+    if (hasNextPage.value) {
+      await fetch(currentBudgetId.value, currentPage.value + 1);
+    }
+  }
+
+  async function prevPage() {
+    if (currentPage.value > 0) {
+      await fetch(currentBudgetId.value, currentPage.value - 1);
     }
   }
 
@@ -67,10 +97,14 @@ export const useExpensesStore = defineStore('expenses', () => {
     loading,
     error,
     currentFilter,
+    currentPage,
+    hasNextPage,
     filteredExpenses,
     fetch,
     create,
     remove,
     setFilter,
+    nextPage,
+    prevPage,
   };
 });

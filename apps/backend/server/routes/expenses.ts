@@ -6,6 +6,11 @@ export interface ExpenseWithCategory extends Expense {
   category: Category;
 }
 
+export interface PaginatedExpenses {
+  items: ExpenseWithCategory[];
+  hasNextPage: boolean;
+}
+
 const app = new Hono();
 
 app.get('/', async (c) => {
@@ -13,20 +18,26 @@ app.get('/', async (c) => {
 
   try {
     const budgetId = c.req.query('budget_id');
-    const limit = c.req.query('limit');
+    const limitParam = c.req.query('limit');
+    const offsetParam = c.req.query('offset');
 
-    let expenses = await repos.expenses.listExpenses(
-      budgetId ? { budget_id: budgetId } : {}
-    );
+    const limit = limitParam ? parseInt(limitParam, 10) : 20;
+    const offset = offsetParam ? parseInt(offsetParam, 10) : 0;
 
-    if (limit) {
-      expenses = expenses.slice(0, parseInt(limit, 10));
-    }
+    // Over-fetch by 1 to detect if there's a next page
+    const expenses = await repos.expenses.listExpenses({
+      budget_id: budgetId,
+      limit: limit + 1,
+      offset,
+    });
+
+    const hasNextPage = expenses.length > limit;
+    const pageExpenses = hasNextPage ? expenses.slice(0, limit) : expenses;
 
     const categories = await repos.categories.listCategories();
     const categoryMap = new Map(categories.map((cat) => [cat.id, cat]));
 
-    const expensesWithCategory: ExpenseWithCategory[] = expenses.map((expense) => ({
+    const items: ExpenseWithCategory[] = pageExpenses.map((expense) => ({
       ...expense,
       category: categoryMap.get(expense.category_id) ?? {
         id: expense.category_id,
@@ -41,7 +52,7 @@ app.get('/', async (c) => {
       },
     }));
 
-    return c.json(expensesWithCategory);
+    return c.json({ items, hasNextPage } as PaginatedExpenses);
   } catch (error) {
     return c.json({ error: (error as Error).message }, 500);
   }

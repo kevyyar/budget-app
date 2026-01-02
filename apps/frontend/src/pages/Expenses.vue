@@ -59,13 +59,33 @@
         </li>
       </ul>
       <p v-else class="empty u-body">No expenses found</p>
+
+      <nav v-if="expensesStore.items.length" class="pagination">
+        <button
+          class="pagination-btn"
+          :disabled="expensesStore.currentPage === 0"
+          @click="expensesStore.prevPage"
+        >
+          <i class="pi pi-chevron-left" />
+          Prev
+        </button>
+        <span class="pagination-page">Page {{ expensesStore.currentPage + 1 }}</span>
+        <button
+          class="pagination-btn"
+          :disabled="!expensesStore.hasNextPage"
+          @click="expensesStore.nextPage"
+        >
+          Next
+          <i class="pi pi-chevron-right" />
+        </button>
+      </nav>
     </template>
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import { useExpensesStore, type ExpenseFilter } from '@/stores/expenses';
+import { useExpensesStore } from '@/stores/expenses';
 import { useCategoriesStore } from '@/stores/categories';
 import { useBudgetStore } from '@/stores/budget';
 import type { Category } from '@/types';
@@ -261,5 +281,46 @@ async function handleDelete(id: string) {
 .delete-btn:hover {
   background: rgba(248, 113, 113, 0.15);
   color: #f87171;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding: 1rem 0;
+}
+
+.pagination-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  background: var(--color-card);
+  border: none;
+  border-radius: 0.75rem;
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: var(--color-accent);
+  color: #000;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination-page {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  min-width: 4rem;
+  text-align: center;
 }
 </style>
