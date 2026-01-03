@@ -1,6 +1,7 @@
 {
   "name": "budget-system",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "pnpm run dev:frontend & pnpm run dev:backend",
     "dev:frontend": "pnpm --filter ./apps/frontend dev",
@@ -15,5 +16,9 @@
     "@primeuix/themes": "^2.0.2",
     "primeicons": "^7.0.0",
     "primevue": "^4.5.4"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.4",
+    "typescript": "~5.9.3"
   }
 }

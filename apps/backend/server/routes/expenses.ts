@@ -100,13 +100,17 @@ app.post('/', async (c) => {
       return c.json({ error: 'is_fixed must be a boolean' }, 400);
     }
 
+    const descriptionValue = typeof description === 'string' ? description : undefined;
+    const expenseDateValue = typeof expenseDate === 'string' ? expenseDate : undefined;
+    const isFixedValue = typeof isFixed === 'boolean' ? isFixed : undefined;
+
     const expense = await repos.expenses.createExpense({
       budget_id: budgetId,
       category_id: categoryId,
       amount,
-      description,
-      expense_date: expenseDate,
-      is_fixed: isFixed,
+      description: descriptionValue,
+      expense_date: expenseDateValue,
+      is_fixed: isFixedValue,
       user_id: user.id,
     });
     return c.json(expense, 201);
