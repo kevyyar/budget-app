@@ -10,6 +10,8 @@
     "lint:backend": "pnpm --filter ./apps/backend lint"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "hono": "^4.6.0",
     "@primeuix/themes": "^2.0.2",
     "primeicons": "^7.0.0",
     "primevue": "^4.5.4"
