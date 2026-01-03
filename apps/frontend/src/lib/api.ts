@@ -1,9 +1,6 @@
 import { useAuthStore } from '@/stores/auth';
 
 const API_URL = import.meta.env.VITE_API_URL ?? (import.meta.env.DEV ? 'http://localhost:3001' : '');
-if (!import.meta.env.DEV && !API_URL) {
-  throw new Error('VITE_API_URL is required for non-dev builds');
-}
 
 export interface ApiError {
   error: string;
